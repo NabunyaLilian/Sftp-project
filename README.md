@@ -4,6 +4,24 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+## Description
+
+This project implements secure file transfer functionality using **SFTP (Secure File Transfer Protocol)** to facilitate reliable, encrypted transfer of files between remote servers or between a local machine and a remote server.
+
+Key features include:
+
+* Establishing SSH connections to remote hosts for secure authentication and communication.
+* Uploading and downloading files and directories with support for recursive operations.
+* Handling file permissions and transfer errors robustly to ensure data integrity.
+* Designed with security best practices, including encrypted channels and credential management.
+
+This project is ideal for environments requiring secure data exchange across network boundaries, such as cloud deployments, backup solutions, and remote system administration.
+
+---
+
+Would you like me to tailor it more towards a specific use case or add technical stack details (like Java, Python, or Quarkus if you used them)?
+
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
@@ -13,6 +31,10 @@ You can run your application in dev mode that enables live coding using:
 ```
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+
+## Swagger UI
+You can access the swagger documentation via
+[http://localhost:8080/q/swagger-ui/](http://localhost:8080/q/swagger-ui/ )
 
 ## Packaging and running the application
 
