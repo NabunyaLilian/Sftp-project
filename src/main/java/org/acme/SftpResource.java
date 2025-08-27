@@ -2,10 +2,7 @@ package org.acme;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -34,5 +31,50 @@ public class SftpResource {
         return success
                 ? Response.ok("Transfer complete").build()
                 : Response.status(500).entity("Transfer failed").build();
+    }
+
+    @POST
+    @Path("/upload")
+    public Response UploadFile(UploadRequest request) {
+        System.out.println("Transfer request:-------------------------" + request.toString());
+        boolean success = sftpService.uploadFile(request);
+
+        return success
+                ? Response.ok("Transfer complete").build()
+                : Response.status(500).entity("Transfer failed").build();
+    }
+
+    @GET
+    @Path("/download-files")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response downloadFiles(
+            @QueryParam("host") String host,
+            @QueryParam("port") @DefaultValue("22") int port,
+            @QueryParam("user") String user,
+            @QueryParam("privateKey") String privateKey,
+            @QueryParam("remotePath") String remotePath,
+            @QueryParam("localDir") String localDir,
+            @QueryParam("knownHosts") String knownHosts
+    ) {
+        DownloadRequest req = new DownloadRequest();
+        req.privateKey = privateKey;
+        req.user = user;
+        req.host = host;
+        req.port = port;
+        req.localDir = localDir;
+        req.remotePath = remotePath;
+        req.knownHosts = knownHosts;
+
+        System.out.println("Download request:-------------------------" + req);
+
+        boolean success = new SftpService().downloadAllZips(req);
+
+        if (success) {
+            return Response.ok("{\"status\":\"Download complete\"}").build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"status\":\"Download failed\"}")
+                    .build();
+        }
     }
 }
