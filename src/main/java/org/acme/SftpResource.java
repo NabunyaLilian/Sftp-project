@@ -35,9 +35,8 @@ public class SftpResource {
 
     @POST
     @Path("/upload")
-    public Response UploadFile(UploadRequest request) {
-        System.out.println("Transfer request:-------------------------" + request.toString());
-        boolean success = sftpService.uploadFile(request);
+    public Response UploadFile() {
+        boolean success = sftpService.uploadFile();
 
         return success
                 ? Response.ok("Transfer complete").build()
@@ -47,27 +46,8 @@ public class SftpResource {
     @GET
     @Path("/download-files")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response downloadFiles(
-            @QueryParam("host") String host,
-            @QueryParam("port") @DefaultValue("22") int port,
-            @QueryParam("user") String user,
-            @QueryParam("privateKey") String privateKey,
-            @QueryParam("remotePath") String remotePath,
-            @QueryParam("localDir") String localDir,
-            @QueryParam("knownHosts") String knownHosts
-    ) {
-        DownloadRequest req = new DownloadRequest();
-        req.privateKey = privateKey;
-        req.user = user;
-        req.host = host;
-        req.port = port;
-        req.localDir = localDir;
-        req.remotePath = remotePath;
-        req.knownHosts = knownHosts;
-
-        System.out.println("Download request:-------------------------" + req);
-
-        boolean success = new SftpService().downloadAllZips(req);
+    public Response downloadFiles() {
+        boolean success = sftpService.downloadAllZips();
 
         if (success) {
             return Response.ok("{\"status\":\"Download complete\"}").build();
